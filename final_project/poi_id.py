@@ -19,10 +19,11 @@ from tester import dump_classifier_and_data
 
 features_list = ['poi','salary', 'deferral_payments', 'total_payments', 'loan_advances',
                  'bonus', 'restricted_stock_deferred', 'deferred_income', 'total_stock_value', 
-                 'expenses', 'exercised_stock_options', 'other', 'long_term_incentive', 
+                 'expenses', 'exercised_stock_options', 'long_term_incentive', 
                  'restricted_stock', 'director_fees', 'to_messages', 'from_poi_to_this_person', 
-                 'from_messages', 'from_this_person_to_poi', 'shared_receipt_with_poi',
-                 'fraction_to_poi', 'fraction_from_poi']
+                 'from_messages', 'from_this_person_to_poi','shared_receipt_with_poi',
+                 'fraction_to_poi', 'fraction_from_poi',
+                  'other']
 
 #features_list = ['poi','bonus','exercised_stock_options','fraction_to_poi']
 #features_list = ['poi','fraction_to_poi', 'fraction_from_poi']
@@ -60,6 +61,9 @@ def remove_outliers(dataset):
     print "=============================================================="
     print remove_key, "is an outliers"
     remove_key = 'THE TRAVEL AGENCY IN THE PARK'
+    dataset.pop(remove_key,0)
+    print remove_key, "is an outliers"
+    remove_key = 'LOCKHART EUGENE E'
     dataset.pop(remove_key,0)
     print remove_key, "is an outliers"
     return dataset
@@ -244,7 +248,7 @@ def chosen_parameters(num,features_train,labels_train, features_list):
     for i in range(num):
         for ii, score in enumerate(clf.scores_):
             if rankings[i] == score:
-                print "The score of feature", features_list[ii], "is", score
+                print "The score of feature", features_list[ii+1], "is", score
 
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
@@ -261,7 +265,7 @@ features_train, features_test, labels_train, labels_test = \
     train_test_split(features, labels, test_size=0.3, random_state=42)
 
 #### have chose six features as considerations for better performance
-#chosen_parameters(12,features_train,labels_train,features_list)
+#chosen_parameters(len(features_list)-1,features_train,labels_train,features_list)
 
 clf = Gaussian_classifier(features_train, labels_train, features_test, labels_test)
 
@@ -271,6 +275,9 @@ clf = Gaussian_classifier(features_train, labels_train, features_test, labels_te
 
 
 print "=============================================================="
+#clf = GaussianNB()
+#clf.fit(features_train,labels_train)
+
 test_classifier(clf, my_dataset, features_list)
 
 
